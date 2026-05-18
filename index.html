@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results Predictor</title>
+    <!-- Include Chart.js for charting -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --panel-bg: #ffffff;
+            --text-main: #374151;
+            --primary: #2563eb;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --border: #e5e7eb;
+            --radius-lg: 12px;
+            --radius-sm: 6px;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr 300px;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .panel {
+            background: var(--panel-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h2 { margin-top: 0; font-size: 1.1rem; color: #111827; }
+        
+        /* Layout specific */
+        .left-sidebar { display: flex; flex-direction: column; gap: 10px; }
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+        
+        .logo-container { text-align: center; margin-bottom: 20px; }
+        .logo-container img { max-width: 100%; height: auto; }
+        
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; font-size: 0.9rem; margin-bottom: 5px; font-weight: 500; }
+        .control-group input, .control-group select {
+            width: 100%; padding: 8px; border: 1px solid var(--border);
+            border-radius: var(--radius-sm); box-sizing: border-box;
+        }
+        
+        /* Sliders / Inputs Grid */
+        .inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .slider-control { background: #f9fafb; padding: 15px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+        .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;}
+        .slider-header label { font-size: 0.9rem; font-weight: 600; }
+        .slider-header input { width: 60px; text-align: right; border: 1px solid var(--border); padding: 4px; border-radius: 4px; }
+        .range-wrap { display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: #6b7280; }
+        input[type=range] { flex: 1; }
+
+        /* Right Summary */
+        .summary-block { border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; }
+        .profit-tile { text-align: center; background: #f8fafc; padding: 15px; border-radius: var(--radius-sm); margin-bottom: 10px; border: 1px solid var(--border); }
+        .profit-tile .label { font-size: 0.85rem; color: #64748b; margin-bottom: 5px; }
+        .profit-tile .value { font-size: 1.2rem; font-weight: 700; color: #0f172a; }
+
+        button { width: 100%; padding: 10px; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; color: white; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-green { background-color: #4ade80; color: #064e3b; margin-bottom: 10px; }
+        .btn-blue { background-color: #3b82f6; }
+        .social-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        .social-buttons button { flex: 1; padding: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <!-- Left Sidebar -->
+    <div class="left-sidebar">
+        <div class="panel logo-container">
+            <h2>RESULTS PREDICTOR</h2>
+            <div style="font-size: 0.8rem; color: #6b7280;">EMAIL CAMPAIGN</div>
+        </div>
+        <div class="panel">
+            <div class="control-group">
+                <label>Language</label>
+                <select><option>English</option></select>
+            </div>
+            <div class="control-group">
+                <label>Time Unit</label>
+                <select id="timeUnit"><option>Week</option><option>Month</option></select>
+            </div>
+            <div class="control-group">
+                <label>Number of Periods</label>
+                <input type="number" id="periods" value="12">
+            </div>
+            <div class="control-group">
+                <label>Currency</label>
+                <select><option>$ USD</option></select>
+            </div>
+        </div>
+        <div class="panel" style="font-size: 0.9rem; line-height: 1.5;">
+            <strong>Would you like to leverage a widget like this one in your campaigns?</strong>
+            <p>Widgets like this are always valued by customers.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Chart Panel -->
+        <div class="panel">
+            <h2>Metrics Over Time</h2>
+            <canvas id="mainChart" height="100"></canvas>
+        </div>
+        
+        <!-- Revenue Panel -->
+        <div class="panel">
+            <h2>Revenue</h2>
+            <div class="inputs-grid">
+                <div class="slider-control">
+                    <div class="slider-header"><label>Launching Customers</label><input type="number" id="launchingUsers" value="119" onchange="updateCalcs()"></div>
+                    <div class="range-wrap"><span>0</span><input type="range" min="0" max="1000" value="119" oninput="syncInput(this, 'launchingUsers')"><span>1000</span></div>
+                </div>
+                <div class="slider-control">
+                    <div class="slider-header"><label>Revenue Per Conversion</label><input type="number" id="revPerConv" value="64.8" onchange="updateCalcs()"></div>
+                    <div class="range-wrap"><span>0</span><input type="range" min="0" max="1000" value="64.8" oninput="syncInput(this, 'revPerConv')"><span>1000</span></div>
+                </div>
+                <div class="slider-control">
+                    <div class="slider-header"><label>Customer Growth Rate</label><input type="number" id="growthRate" value="0.15" onchange="updateCalcs()" step="0.01"></div>
+                    <div class="range-wrap"><span>0</span><input type="range" min="0" max="1" value="0.15" step="0.01" oninput="syncInput(this, 'growthRate')"><span>1</span></div>
+                </div>
+                <div class="slider-control">
+                    <div class="slider-header"><label>Average Response Rate</label><input type="number" id="responseRate" value="0.2" onchange="updateCalcs()" step="0.01"></div>
+                    <div class="range-wrap"><span>0</span><input type="range" min="0" max="1" value="0.2" step="0.01" oninput="syncInput(this, 'responseRate')"><span>1</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expenses Panel -->
+        <div class="panel">
+            <h2>Expenses</h2>
+            <div class="inputs-grid">
+                <div class="slider-control">
+                    <div class="slider-header"><label>Customer Churn Rate</label><input type="number" id="churnRate" value="0.02" onchange="updateCalcs()" step="0.01"></div>
+                    <div class="range-wrap"><span>0</span><input type="range" min="0" max="1" value="0.02" step="0.01" oninput="syncInput(this, 'churnRate')"><span>1</span></div>
+                </div>
+                <div class="slider-control">
+                    <div class="slider-header"><label>Variable Cost</label><input type="number" id="varCost" value="10.8" onchange="updateCalcs()"></div>
+                    <div class="range-wrap"><span>0</span><input type="range" min="0" max="1000" value="10.8" oninput="syncInput(this, 'varCost')"><span>1000</span></div>
+                </div>
+                <div class="slider-control">
+                    <div class="slider-header"><label>Fixed Costs</label><input type="number" id="fixedCosts" value="175" onchange="updateCalcs()"></div>
+                    <div class="range-wrap"><span>0</span><input type="range" min="0" max="1000" value="175" oninput="syncInput(this, 'fixedCosts')"><span>1000</span></div>
+                </div>
+                <div class="slider-control">
+                    <div class="slider-header"><label>Starting Cost</label><input type="number" id="startCost" value="0" onchange="updateCalcs()"></div>
+                    <div class="range-wrap"><span>0</span><input type="range" min="0" max="1000" value="0" oninput="syncInput(this, 'startCost')"><span>1000</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="right-sidebar">
+        <div class="panel">
+            <h2>Campaign Summary</h2>
+            <p style="color: var(--success); font-weight: 500;">Profitable in week #1</p>
+            
+            <div class="summary-block">
+                <h3 style="font-size: 0.95rem; margin-bottom: 10px;">At week #12:</h3>
+                <div class="summary-row"><span>Customers:</span><strong id="sumCustomers">3,052</strong></div>
+                <div class="summary-row"><span>Revenue:</span><strong style="color: var(--success);" id="sumRev">$39,558.73</strong></div>
+                <div class="summary-row"><span>Expenses:</span><strong style="color: var(--danger);" id="sumExp">$8,693.12</strong></div>
+            </div>
+
+            <div class="profit-tile">
+                <div class="label">Total Profit</div>
+                <div class="value" id="sumProfit">$30,865.61</div>
+            </div>
+            <div class="profit-tile">
+                <div class="label">Average Retention</div>
+                <div class="value">50.00 weeks</div>
+            </div>
+            <div class="profit-tile">
+                <div class="label">Return on Investment</div>
+                <div class="value" id="sumROI">355.06%</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3 style="font-size: 0.9rem;">Export Data</h3>
+            <button class="btn-green">Download CSV</button>
+        </div>
+        
+        <div class="panel">
+            <h3 style="font-size: 0.9rem;">Load Data</h3>
+            <button class="btn-blue">Load CSV</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function syncInput(slider, inputId) {
+        document.getElementById(inputId).value = slider.value;
+        updateCalcs();
+    }
+
+    let chartInstance = null;
+
+    function initChart() {
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Array.from({length: 12}, (_, i) => i + 1),
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'Profit',
+                        data: [],
+                        borderColor: '#16a34a',
+                        backgroundColor: '#16a34a',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        tension: 0.1,
+                        yAxisID: 'y'
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Customers',
+                        data: [],
+                        backgroundColor: '#2563eb',
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { type: 'linear', display: false, position: 'left' },
+                    y1: { type: 'linear', display: false, position: 'right', grid: { drawOnChartArea: false } }
+                }
+            }
+        });
+    }
+
+    function updateCalcs() {
+        const pLaunchCust = parseFloat(document.getElementById('launchingUsers').value) || 0;
+        const pRevPerConv = parseFloat(document.getElementById('revPerConv').value) || 0;
+        const pGrowthRate = parseFloat(document.getElementById('growthRate').value) || 0;
+        const pResponseRate = parseFloat(document.getElementById('responseRate').value) || 0;
+        const pChurnRate = parseFloat(document.getElementById('churnRate').value) || 0;
+        const pVarCost = parseFloat(document.getElementById('varCost').value) || 0;
+        const pFixedCosts = parseFloat(document.getElementById('fixedCosts').value) || 0;
+        const periods = parseInt(document.getElementById('periods').value) || 12;
+
+        let customersData = [];
+        let profitData = [];
+        
+        let currentCust = pLaunchCust;
+        let totalRev = 0;
+        let totalExp = 0;
+        let totalProfit = 0;
+
+        for(let i=1; i<=periods; i++) {
+            // Simplified calculation logic to approximate chart behavior
+            let addedCust = currentCust * pGrowthRate;
+            let lostCust = currentCust * pChurnRate;
+            currentCust = currentCust + addedCust - lostCust;
+            
+            customersData.push(Math.round(currentCust));
+
+            let periodRev = currentCust * pRevPerConv * pResponseRate;
+            let periodExp = pFixedCosts + (currentCust * pVarCost);
+            let periodProfit = periodRev - periodExp;
+            
+            profitData.push(totalProfit + periodProfit);
+            
+            if(i === periods) {
+                totalRev += periodRev;
+                totalExp += periodExp;
+                totalProfit += periodProfit;
+                
+                document.getElementById('sumCustomers').innerText = Math.round(currentCust).toLocaleString();
+                document.getElementById('sumRev').innerText = "$" + periodRev.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+                document.getElementById('sumExp').innerText = "$" + periodExp.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+                document.getElementById('sumProfit').innerText = "$" + totalProfit.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+                
+                let roi = totalExp > 0 ? (totalProfit / totalExp) * 100 : 0;
+                document.getElementById('sumROI').innerText = roi.toFixed(2) + "%";
+            } else {
+                totalRev += periodRev;
+                totalExp += periodExp;
+                totalProfit += periodProfit;
+            }
+        }
+
+        if(chartInstance) {
+            chartInstance.data.labels = Array.from({length: periods}, (_, i) => i + 1);
+            chartInstance.data.datasets[0].data = profitData;
+            chartInstance.data.datasets[1].data = customersData;
+            chartInstance.update();
+        }
+    }
+
+    window.onload = () => {
+        initChart();
+        updateCalcs();
+        
+        document.getElementById('periods').addEventListener('change', updateCalcs);
+    };
+</script>
+</body>
+</html>
