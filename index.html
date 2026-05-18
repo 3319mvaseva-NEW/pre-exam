@@ -84,30 +84,33 @@
     <!-- Left Sidebar -->
     <div class="left-sidebar">
         <div class="panel logo-container">
-            <h2>RESULTS PREDICTOR</h2>
-            <div style="font-size: 0.8rem; color: #6b7280;">EMAIL CAMPAIGN</div>
+            <h2 data-i18n="results_predictor">RESULTS PREDICTOR</h2>
+            <div style="font-size: 0.8rem; color: #6b7280;" data-i18n="email_campaign">EMAIL CAMPAIGN</div>
         </div>
         <div class="panel">
             <div class="control-group">
-                <label>Language</label>
-                <select><option>English</option></select>
+                <label data-i18n="language">Language</label>
+                <select id="langSelect" onchange="changeLanguage()">
+                    <option value="en" data-i18n="english">English</option>
+                    <option value="bg" data-i18n="bulgarian">Bulgarian</option>
+                </select>
             </div>
             <div class="control-group">
-                <label>Time Unit</label>
-                <select id="timeUnit"><option>Week</option><option>Month</option></select>
+                <label data-i18n="time_unit">Time Unit</label>
+                <select id="timeUnit"><option data-i18n="week">Week</option><option data-i18n="month">Month</option></select>
             </div>
             <div class="control-group">
-                <label>Number of Periods</label>
+                <label data-i18n="num_periods">Number of Periods</label>
                 <input type="number" id="periods" value="12">
             </div>
             <div class="control-group">
-                <label>Currency</label>
+                <label data-i18n="currency">Currency</label>
                 <select><option>$ USD</option></select>
             </div>
         </div>
         <div class="panel" style="font-size: 0.9rem; line-height: 1.5;">
-            <strong>Would you like to leverage a widget like this one in your campaigns?</strong>
-            <p>Widgets like this are always valued by customers.</p>
+            <strong data-i18n="promo_q">Would you like to leverage a widget like this one in your campaigns?</strong>
+            <p data-i18n="promo_a">Widgets like this are always valued by customers.</p>
         </div>
     </div>
 
@@ -115,28 +118,28 @@
     <div class="main-content">
         <!-- Chart Panel -->
         <div class="panel">
-            <h2>Metrics Over Time</h2>
+            <h2 data-i18n="metrics_over_time">Metrics Over Time</h2>
             <canvas id="mainChart" height="100"></canvas>
         </div>
         
         <!-- Revenue Panel -->
         <div class="panel">
-            <h2>Revenue</h2>
+            <h2 data-i18n="revenue">Revenue</h2>
             <div class="inputs-grid">
                 <div class="slider-control">
-                    <div class="slider-header"><label>Launching Customers</label><input type="number" id="launchingUsers" value="119" onchange="updateCalcs()"></div>
+                    <div class="slider-header"><label data-i18n="launching_customers">Launching Customers</label><input type="number" id="launchingUsers" value="119" onchange="updateCalcs()"></div>
                     <div class="range-wrap"><span>0</span><input type="range" min="0" max="1000" value="119" oninput="syncInput(this, 'launchingUsers')"><span>1000</span></div>
                 </div>
                 <div class="slider-control">
-                    <div class="slider-header"><label>Revenue Per Conversion</label><input type="number" id="revPerConv" value="64.8" onchange="updateCalcs()"></div>
+                    <div class="slider-header"><label data-i18n="revenue_per_conv">Revenue Per Conversion</label><input type="number" id="revPerConv" value="64.8" onchange="updateCalcs()"></div>
                     <div class="range-wrap"><span>0</span><input type="range" min="0" max="1000" value="64.8" oninput="syncInput(this, 'revPerConv')"><span>1000</span></div>
                 </div>
                 <div class="slider-control">
-                    <div class="slider-header"><label>Customer Growth Rate</label><input type="number" id="growthRate" value="0.15" onchange="updateCalcs()" step="0.01"></div>
+                    <div class="slider-header"><label data-i18n="customer_growth">Customer Growth Rate</label><input type="number" id="growthRate" value="0.15" onchange="updateCalcs()" step="0.01"></div>
                     <div class="range-wrap"><span>0</span><input type="range" min="0" max="1" value="0.15" step="0.01" oninput="syncInput(this, 'growthRate')"><span>1</span></div>
                 </div>
                 <div class="slider-control">
-                    <div class="slider-header"><label>Average Response Rate</label><input type="number" id="responseRate" value="0.2" onchange="updateCalcs()" step="0.01"></div>
+                    <div class="slider-header"><label data-i18n="avg_response_rate">Average Response Rate</label><input type="number" id="responseRate" value="0.2" onchange="updateCalcs()" step="0.01"></div>
                     <div class="range-wrap"><span>0</span><input type="range" min="0" max="1" value="0.2" step="0.01" oninput="syncInput(this, 'responseRate')"><span>1</span></div>
                 </div>
             </div>
@@ -144,22 +147,22 @@
 
         <!-- Expenses Panel -->
         <div class="panel">
-            <h2>Expenses</h2>
+            <h2 data-i18n="expenses">Expenses</h2>
             <div class="inputs-grid">
                 <div class="slider-control">
-                    <div class="slider-header"><label>Customer Churn Rate</label><input type="number" id="churnRate" value="0.02" onchange="updateCalcs()" step="0.01"></div>
+                    <div class="slider-header"><label data-i18n="customer_churn">Customer Churn Rate</label><input type="number" id="churnRate" value="0.02" onchange="updateCalcs()" step="0.01"></div>
                     <div class="range-wrap"><span>0</span><input type="range" min="0" max="1" value="0.02" step="0.01" oninput="syncInput(this, 'churnRate')"><span>1</span></div>
                 </div>
                 <div class="slider-control">
-                    <div class="slider-header"><label>Variable Cost</label><input type="number" id="varCost" value="10.8" onchange="updateCalcs()"></div>
+                    <div class="slider-header"><label data-i18n="var_cost">Variable Cost</label><input type="number" id="varCost" value="10.8" onchange="updateCalcs()"></div>
                     <div class="range-wrap"><span>0</span><input type="range" min="0" max="1000" value="10.8" oninput="syncInput(this, 'varCost')"><span>1000</span></div>
                 </div>
                 <div class="slider-control">
-                    <div class="slider-header"><label>Fixed Costs</label><input type="number" id="fixedCosts" value="175" onchange="updateCalcs()"></div>
+                    <div class="slider-header"><label data-i18n="fixed_costs">Fixed Costs</label><input type="number" id="fixedCosts" value="175" onchange="updateCalcs()"></div>
                     <div class="range-wrap"><span>0</span><input type="range" min="0" max="1000" value="175" oninput="syncInput(this, 'fixedCosts')"><span>1000</span></div>
                 </div>
                 <div class="slider-control">
-                    <div class="slider-header"><label>Starting Cost</label><input type="number" id="startCost" value="0" onchange="updateCalcs()"></div>
+                    <div class="slider-header"><label data-i18n="starting_cost">Starting Cost</label><input type="number" id="startCost" value="0" onchange="updateCalcs()"></div>
                     <div class="range-wrap"><span>0</span><input type="range" min="0" max="1000" value="0" oninput="syncInput(this, 'startCost')"><span>1000</span></div>
                 </div>
             </div>
@@ -169,43 +172,151 @@
     <!-- Right Sidebar -->
     <div class="right-sidebar">
         <div class="panel">
-            <h2>Campaign Summary</h2>
-            <p style="color: var(--success); font-weight: 500;">Profitable in week #1</p>
+            <h2 data-i18n="campaign_summary">Campaign Summary</h2>
+            <p style="color: var(--success); font-weight: 500;" data-i18n="profitable_week">Profitable in week #1</p>
             
             <div class="summary-block">
-                <h3 style="font-size: 0.95rem; margin-bottom: 10px;">At week #12:</h3>
-                <div class="summary-row"><span>Customers:</span><strong id="sumCustomers">3,052</strong></div>
-                <div class="summary-row"><span>Revenue:</span><strong style="color: var(--success);" id="sumRev">$39,558.73</strong></div>
-                <div class="summary-row"><span>Expenses:</span><strong style="color: var(--danger);" id="sumExp">$8,693.12</strong></div>
+                <h3 style="font-size: 0.95rem; margin-bottom: 10px;" id="val_at_week">At week #12:</h3>
+                <div class="summary-row"><span data-i18n="customers">Customers:</span><strong id="sumCustomers">3,052</strong></div>
+                <div class="summary-row"><span data-i18n="revenue_colon">Revenue:</span><strong style="color: var(--success);" id="sumRev">$39,558.73</strong></div>
+                <div class="summary-row"><span data-i18n="expenses_colon">Expenses:</span><strong style="color: var(--danger);" id="sumExp">$8,693.12</strong></div>
             </div>
 
             <div class="profit-tile">
-                <div class="label">Total Profit</div>
+                <div class="label" data-i18n="total_profit">Total Profit</div>
                 <div class="value" id="sumProfit">$30,865.61</div>
             </div>
             <div class="profit-tile">
-                <div class="label">Average Retention</div>
-                <div class="value">50.00 weeks</div>
+                <div class="label" data-i18n="avg_retention">Average Retention</div>
+                <div class="value" id="sumRetention">50.00 weeks</div>
             </div>
             <div class="profit-tile">
-                <div class="label">Return on Investment</div>
+                <div class="label" data-i18n="roi">Return on Investment</div>
                 <div class="value" id="sumROI">355.06%</div>
             </div>
         </div>
 
         <div class="panel">
-            <h3 style="font-size: 0.9rem;">Export Data</h3>
-            <button class="btn-green">Download CSV</button>
+            <h3 style="font-size: 0.9rem;" data-i18n="export_data">Export Data</h3>
+            <button class="btn-green" data-i18n="download_csv">Download CSV</button>
         </div>
         
         <div class="panel">
-            <h3 style="font-size: 0.9rem;">Load Data</h3>
-            <button class="btn-blue">Load CSV</button>
+            <h3 style="font-size: 0.9rem;" data-i18n="load_data">Load Data</h3>
+            <button class="btn-blue" data-i18n="load_csv">Load CSV</button>
         </div>
     </div>
 </div>
 
 <script>
+    const translations = {
+        en: {
+            results_predictor: "RESULTS PREDICTOR",
+            email_campaign: "EMAIL CAMPAIGN",
+            language: "Language",
+            english: "English",
+            bulgarian: "Bulgarian",
+            time_unit: "Time Unit",
+            week: "Week",
+            month: "Month",
+            num_periods: "Number of Periods",
+            currency: "Currency",
+            promo_q: "Would you like to leverage a widget like this one in your campaigns?",
+            promo_a: "Widgets like this are always valued by customers.",
+            metrics_over_time: "Metrics Over Time",
+            revenue: "Revenue",
+            launching_customers: "Launching Customers",
+            revenue_per_conv: "Revenue Per Conversion",
+            customer_growth: "Customer Growth Rate",
+            avg_response_rate: "Average Response Rate",
+            expenses: "Expenses",
+            customer_churn: "Customer Churn Rate",
+            var_cost: "Variable Cost",
+            fixed_costs: "Fixed Costs",
+            starting_cost: "Starting Cost",
+            campaign_summary: "Campaign Summary",
+            profitable_week: "Profitable in week #1",
+            at_week: "At week #{num}:",
+            customers: "Customers:",
+            revenue_colon: "Revenue:",
+            expenses_colon: "Expenses:",
+            total_profit: "Total Profit",
+            avg_retention: "Average Retention",
+            roi: "Return on Investment",
+            export_data: "Export Data",
+            download_csv: "Download CSV",
+            load_data: "Load Data",
+            load_csv: "Load CSV",
+            chart_profit: "Profit",
+            chart_customers: "Customers",
+            avg_retention_val: "50.00 weeks"
+        },
+        bg: {
+            results_predictor: "ПРОГНОЗАТОР НА РЕЗУЛТАТИ",
+            email_campaign: "ИМЕЙЛ КАМПАНИЯ",
+            language: "Език",
+            english: "Английски",
+            bulgarian: "Български",
+            time_unit: "Времева единица",
+            week: "Седмица",
+            month: "Месец",
+            num_periods: "Брой периоди",
+            currency: "Валута",
+            promo_q: "Бихте ли искали да използвате такъв уиджет във вашите кампании?",
+            promo_a: "Подобни уиджети винаги се ценят от клиентите.",
+            metrics_over_time: "Метрики във времето",
+            revenue: "Приходи",
+            launching_customers: "Стартиращи клиенти",
+            revenue_per_conv: "Приход на конверсия",
+            customer_growth: "Темп на растеж на клиентите",
+            avg_response_rate: "Средна честота на отговор",
+            expenses: "Разходи",
+            customer_churn: "Степен на отлив на клиенти",
+            var_cost: "Променлив разход",
+            fixed_costs: "Фиксирани разходи",
+            starting_cost: "Начален разход",
+            campaign_summary: "Резюме на кампанията",
+            profitable_week: "Печеливша в седмица #1",
+            at_week: "На седмица #{num}:",
+            customers: "Клиенти:",
+            revenue_colon: "Приходи:",
+            expenses_colon: "Разходи:",
+            total_profit: "Обща печалба",
+            avg_retention: "Средно задържане",
+            roi: "Възвръщаемост на инвестицията",
+            export_data: "Експортиране на данни",
+            download_csv: "Изтегли CSV",
+            load_data: "Зареждане на данни",
+            load_csv: "Зареди CSV",
+            chart_profit: "Печалба",
+            chart_customers: "Клиенти",
+            avg_retention_val: "50.00 седмици"
+        }
+    };
+
+    let currentLang = 'en';
+
+    function changeLanguage() {
+        currentLang = document.getElementById('langSelect').value;
+        const dict = translations[currentLang];
+        
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key]) {
+                el.innerText = dict[key];
+            }
+        });
+
+        // Update translations for chart
+        if (chartInstance) {
+            chartInstance.data.datasets[0].label = dict.chart_profit;
+            chartInstance.data.datasets[1].label = dict.chart_customers;
+            chartInstance.update();
+        }
+
+        updateCalcs(); // Recalculate to update dynamic strings containing numbers
+    }
+
     function syncInput(slider, inputId) {
         document.getElementById(inputId).value = slider.value;
         updateCalcs();
@@ -287,6 +398,10 @@
                 totalExp += periodExp;
                 totalProfit += periodProfit;
                 
+                const dict = translations[currentLang] || translations.en;
+                document.getElementById('val_at_week').innerText = dict.at_week.replace('{num}', periods);
+                document.getElementById('sumRetention').innerText = dict.avg_retention_val;
+
                 document.getElementById('sumCustomers').innerText = Math.round(currentCust).toLocaleString();
                 document.getElementById('sumRev').innerText = "$" + periodRev.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
                 document.getElementById('sumExp').innerText = "$" + periodExp.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
@@ -311,7 +426,8 @@
 
     window.onload = () => {
         initChart();
-        updateCalcs();
+        changeLanguage();
+        // updateCalcs is called implicitly by changeLanguage()
         
         document.getElementById('periods').addEventListener('change', updateCalcs);
     };
