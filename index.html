@@ -105,10 +105,7 @@
             </div>
             <div class="control-group">
                 <label data-i18n="currency">Currency</label>
-                <select id="currencySelect" onchange="updateCalcs()">
-                    <option value="EUR">€ EUR</option>
-                    <option value="USD">$ USD</option>
-                </select>
+                <select><option>€ EUR</option></select>
             </div>
         </div>
         <div class="panel" style="font-size: 0.9rem; line-height: 1.5;">
@@ -405,13 +402,10 @@
                 document.getElementById('val_at_week').innerText = dict.at_week.replace('{num}', periods);
                 document.getElementById('sumRetention').innerText = dict.avg_retention_val;
 
-                const currency = document.getElementById('currencySelect') ? document.getElementById('currencySelect').value : 'EUR';
-                const currencySymbol = currency === 'USD' ? '$' : '€';
-
                 document.getElementById('sumCustomers').innerText = Math.round(currentCust).toLocaleString();
-                document.getElementById('sumRev').innerText = currencySymbol + periodRev.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
-                document.getElementById('sumExp').innerText = currencySymbol + periodExp.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
-                document.getElementById('sumProfit').innerText = currencySymbol + totalProfit.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+                document.getElementById('sumRev').innerText = "€" + periodRev.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+                document.getElementById('sumExp').innerText = "€" + periodExp.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+                document.getElementById('sumProfit').innerText = "€" + totalProfit.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
                 
                 let roi = totalExp > 0 ? (totalProfit / totalExp) * 100 : 0;
                 document.getElementById('sumROI').innerText = roi.toFixed(2) + "%";
