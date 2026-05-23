@@ -105,7 +105,7 @@
             </div>
             <div class="control-group">
                 <label data-i18n="currency">Currency</label>
-                <select><option>$ USD</option></select>
+                <select><option>€ EUR</option></select>
             </div>
         </div>
         <div class="panel" style="font-size: 0.9rem; line-height: 1.5;">
@@ -178,13 +178,13 @@
             <div class="summary-block">
                 <h3 style="font-size: 0.95rem; margin-bottom: 10px;" id="val_at_week">At week #12:</h3>
                 <div class="summary-row"><span data-i18n="customers">Customers:</span><strong id="sumCustomers">3,052</strong></div>
-                <div class="summary-row"><span data-i18n="revenue_colon">Revenue:</span><strong style="color: var(--success);" id="sumRev">$39,558.73</strong></div>
-                <div class="summary-row"><span data-i18n="expenses_colon">Expenses:</span><strong style="color: var(--danger);" id="sumExp">$8,693.12</strong></div>
+                <div class="summary-row"><span data-i18n="revenue_colon">Revenue:</span><strong style="color: var(--success);" id="sumRev">€39,558.73</strong></div>
+                <div class="summary-row"><span data-i18n="expenses_colon">Expenses:</span><strong style="color: var(--danger);" id="sumExp">€8,693.12</strong></div>
             </div>
 
             <div class="profit-tile">
                 <div class="label" data-i18n="total_profit">Total Profit</div>
-                <div class="value" id="sumProfit">$30,865.61</div>
+                <div class="value" id="sumProfit">€30,865.61</div>
             </div>
             <div class="profit-tile">
                 <div class="label" data-i18n="avg_retention">Average Retention</div>
@@ -403,9 +403,9 @@
                 document.getElementById('sumRetention').innerText = dict.avg_retention_val;
 
                 document.getElementById('sumCustomers').innerText = Math.round(currentCust).toLocaleString();
-                document.getElementById('sumRev').innerText = "$" + periodRev.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
-                document.getElementById('sumExp').innerText = "$" + periodExp.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
-                document.getElementById('sumProfit').innerText = "$" + totalProfit.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+                document.getElementById('sumRev').innerText = "€" + periodRev.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+                document.getElementById('sumExp').innerText = "€" + periodExp.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+                document.getElementById('sumProfit').innerText = "€" + totalProfit.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
                 
                 let roi = totalExp > 0 ? (totalProfit / totalExp) * 100 : 0;
                 document.getElementById('sumROI').innerText = roi.toFixed(2) + "%";
